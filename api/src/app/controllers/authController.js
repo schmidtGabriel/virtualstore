@@ -68,7 +68,7 @@ router.post('/login', async (req, res) => {
     res.send({user, token: generateToken({id: user.id})});
 
     }catch(err){
-        return res.status(400).send({error: 'Basic Error'})
+        return res.status(400).send({error: err})
 
     }
 })

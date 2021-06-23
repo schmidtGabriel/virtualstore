@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const url = 'mongodb://localhost/virtualstore';
+const url = process.env.MONGO_URL;
 
 mongoose.connect(url, {useNewUrlParser: true});
 mongoose.Promise = global.Promise;

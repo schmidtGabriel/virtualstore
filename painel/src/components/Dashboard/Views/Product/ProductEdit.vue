@@ -44,7 +44,6 @@ import Viewer from "v-viewer";
 import Vue from "vue";
 import moment from "moment";
 import { NAMES } from '../../../../config';
-import {getCookie} from 'src/utils/authService';
 
 Vue.use(Notifications);
 Vue.use(Viewer);
@@ -95,14 +94,7 @@ export default {
       }
     },
 
-    saveImages(file, id) {
-      let request = new XMLHttpRequest();
-      request.open("POST", this.url+"product/image/"+id, true);
-      request.setRequestHeader('authorization','Bearer '+ getCookie('token').replace(/(^")|("$)/g, ''));
-      var formD = new FormData();
-      formD.append('file', file, {filename: 'myImage.jpeg',  contentType: 'multipart/form-data; boundary=---WebKitFormBoundaryrHPgSrtbIrJmn'});
-      request.send(formD);
-    },
+   
   },
 
   data() {
@@ -121,20 +113,6 @@ export default {
     this.$on("save", () => {
       this.updateProduct(this.data)
         .then((res) => {
-
-        // var formD = new FormData();
-        // formD.append('files', this.data.gallery[i]);
-
-        for(var i=0 ; i < this.data.gallery.length; i++){
-        this.saveImages(this.data.gallery[i], this.data._id)
-        }
-
-        // var model = {
-        //   gallery: formD,
-        //   _id: this.data._id
-        // }
-        //this.saveImages(this.data.gallery, this.data._id);
-       // this.sendProductImages(model).then((res)=>{
           this.$notify({
                 group: "foo",
                 title: "Sucesso",

@@ -121,29 +121,7 @@ const actions = {
           return reject(response.body.$error);
         })
     })
-  },
-
-
-  sendProductImages({commit}, data) {
-    return new Promise((resolve, reject) => {
-      api.startLoader()
-      api.sendProductImages(data.gallery, data._id)
-        .then(response => {
-          if (!response.ok) {
-            api.stopLoader()
-            return reject(response.body.$error);
-          } else {
-            api.stopLoader()
-            return resolve(response.body.$success);
-          }
-        }, response => {
-          api.stopLoader()
-          return reject(response.body.$error);
-        })
-    })
-  },
-  
-  
+  },  
  
   deleteProduct({commit}, id) {
     return new Promise((resolve, reject) => {
@@ -164,6 +142,44 @@ const actions = {
     })
   },
 
+  sendProductImages({commit}, data) {
+    return new Promise((resolve, reject) => {
+      api.startLoader()
+      api.sendProductImages(data.gallery, data._id)
+        .then(response => {
+          if (!response.ok) {
+            api.stopLoader()
+            return reject(response.body.$error);
+          } else {
+            api.stopLoader()
+            return resolve(response.body.$success);
+          }
+        }, response => {
+          api.stopLoader()
+          return reject(response.body.$error);
+        })
+    })
+  },
+
+
+  deleteProductImage({commit}, id) {
+    return new Promise((resolve, reject) => {
+      api.startLoader()
+      api.deleteProductImage(id)
+        .then(response => {
+          if (!response.ok) {
+            api.stopLoader()
+            return reject(response.body.$error);
+          } else {
+            api.stopLoader()
+            return resolve(response.body.$success);
+          }
+        }, response => {
+          api.stopLoader()
+          return reject(response.body.$error);
+        })
+    })
+  },
   
   
 };

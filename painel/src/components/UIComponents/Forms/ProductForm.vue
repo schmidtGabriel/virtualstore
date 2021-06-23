@@ -46,7 +46,33 @@
         </div>
 
         <div class="col-md-12"  v-if="data._id">
-          <h4> Galeria de Imagens</h4>
+          <div class="col-md-4"><h4 style="margin: 0"> Galeria de Imagens</h4></div> 
+          <div class="col-md-8 text-right"> <button class="btn btn-fill btn-primary" v-on:click="addImage()"> Adicionar Imagens</button></div>
+          <div class="col-md-12"><h5 v-if="data.images.length == 0"> Sem imagens </h5></div>
+          <div class="row">
+              <div class="col-md-3" v-for="item in data.images" style="margin-top: 10px">
+                <span class="ti-close" style="color: red; float: right" v-on:click="deleteImage(item)"></span>
+                <br>
+                <img  v-bind:src="item.url" width="100%" height="150px" v-viewer/>
+            </div>
+            </div>
+        </div>
+          
+      
+        <div class="text-right">
+          <btn-rounded v-if="!readonly" label="SALVAR" event="execute" />
+        </div>
+      </div>
+    </form>
+    <modal name="imageModal"
+          :resizable="true"
+         :adaptive="true"
+         :width="900"
+         height=auto
+         
+         >
+         <div class="col-md-12">
+            <h4> Adicione novas Imagens</h4>
            <form class="mt-4"
             enctype="multipart/form-data"
           >
@@ -58,9 +84,9 @@
                 class="form-control-file border"
                 ref="image"
                 @change="onFileChange"
-              />
-               
+              />   
             </div>
+
             <div class="row">
               <div class="col-md-3" v-for="item in images" style="margin-top: 10px">
                 <span class="ti-close" style="color: red; float: right" v-on:click="removeImage(item)"></span>
@@ -68,17 +94,12 @@
                 <img  v-bind:src="item" width="100%" height="150px" v-viewer/>
             </div>
             </div>
-            
           </form>
+          <div class="text-right">
+          <button class="btn btn-fill btn-rounded btn-success"  v-on:click="saveImage()" >SALVAR</button>
         </div>
-
-        
-
-        <div class="text-right">
-          <btn-rounded v-if="!readonly" label="SALVAR" event="execute" />
-        </div>
-      </div>
-    </form>
+         </div>
+         </modal>
   </div>
 </template>
 
@@ -86,10 +107,14 @@
 import { mapActions, mapState, mapGetters } from "vuex";
 import moment from "moment";
 import { NAMES } from '../../../config';
+import {getCookie} from 'src/utils/authService';
+
+
 
 export default {
   name: "product-form",
-  components: {},
+  components: {
+  },
 
   props: {
     data: {
@@ -126,7 +151,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["getCategoryList"]),
+    ...mapActions(["getCategoryList", "deleteProductImage", "sendProductImages"]),
     ...mapGetters({
       sidebarFlag: "sidebarFlag",
     }),
@@ -156,8 +181,62 @@ export default {
        this.data.gallery.splice(this.data.gallery.indexOf(image), 1)
     },
 
-   
+    deleteImage(image){
+      this.deleteProductImage(image._id).then((res)=>{
+        this.data.images = res.info.images;
+       
+         return this.$notify({
+            group: "foo",
+            title: "Sucesso",
+            text: res.msg,
+            position: "top center",
+            type: "success",
+          });
 
+      })
+    },
+
+    addImage(){
+      this.$modal.show("imageModal")
+    },
+
+    saveImage(){
+      for(var i=0 ; i < this.data.gallery.length; i++){
+        this.saveImages(this.data.gallery[i], this.data._id)
+        }
+
+      this.$modal.hide("imageModal")
+
+    },
+
+    saveImages(file, id) {
+      var formD = new FormData();
+      formD.append('file', file);
+
+      var model = {
+        gallery: formD,
+        _id: id
+      }
+      this.sendProductImages(model).then((res)=>{
+
+        this.data.images = res.info.images;
+        return this.$notify({
+            group: "foo",
+            title: "Sucesso",
+            text: res.msg,
+            position: "top center",
+            type: "success",
+          });
+      })
+
+    // let request = new XMLHttpRequest();
+    // request.open("POST", this.url+"product/image/"+id, true);
+    // request.setRequestHeader('authorization','Bearer '+ getCookie('token').replace(/(^")|("$)/g, ''));
+    // var formD = new FormData();
+    // formD.append('file', file);
+    // request.send(formD);
+  },
+  
     onInit() {
       if(this.data._id){
         this.data.category = this.data.category._id
@@ -204,6 +283,9 @@ export default {
         this.$parent.$emit(this.event, this.data);
       }
     });
+
+
+    
   },
   data() {
     return {

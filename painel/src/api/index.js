@@ -170,6 +170,12 @@ export default {
       ID: id
     }, data)
   },
+  deleteProductImage: function (id) {
+    return ProductResource.delete({
+      PATH: 'image',
+      ID: id
+    })
+  },
 
   //CATEGORY
   getCategoryList: function (q) {

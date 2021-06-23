@@ -1,14 +1,22 @@
+require("dotenv").config();
 const express = require('express');
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
+const cors = require('cors');
+const path = require("path");
 const app = express();
 
 app.use(express.static(__dirname + '/public'));
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+app.use(morgan("dev"));
+app.use(
+    "/files",
+    express.static(path.resolve(__dirname, "..", "tmp", "uploads"))
+);
 
 // CORS
-const cors = require('cors');
 app.use(cors());
 app.options('*', cors());
 

@@ -2,18 +2,21 @@ const mongoose = require('../../database');
 const bcrypt = require('bcryptjs');
 
 const ProductImageSchema = new mongoose.Schema({
-    url: {
+    name: {
         type: String,
-        required: true
+    },
+    size:{
+        type: Number,
+    },
+    key:{
+        type: String,
+    },
+    url:{
+        type: String,
     },
     product:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
-        required: true
-    },
-    image:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Image',
         required: true
     },
     createdAt: {
@@ -24,6 +27,10 @@ const ProductImageSchema = new mongoose.Schema({
 
 
 ProductImageSchema.pre('save', async function(next) {
+    if(!this.url) {
+        this.url = `${process.env.APP_URL}/files/${this.key}`;
+    }
+    
     next();
 })
 
