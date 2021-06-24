@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="data._id">
     <div class="row margin-half-top">
       <div class="col-md-12">
         <div class="">
@@ -258,8 +258,12 @@ export default {
           name: "Usuários - Lista",
         });
       } else {
-        this.isAdmin = this.data.isAdmin;
-        this.isActive = this.data.isActive;
+        this.getUser(this.data).then((res)=>{
+          this.data = res
+          this.isAdmin = this.data.isAdmin;
+          this.isActive = this.data.isActive;
+        })
+        
       }
     },
   },

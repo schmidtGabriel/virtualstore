@@ -206,7 +206,7 @@ export default {
     this.$on("selectItem", (item) => {
       this.$router.push({
         name: "Categorias - Editar",
-        params: { id: item },
+        params: { id: item._id },
       });
     });
 

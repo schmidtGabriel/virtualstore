@@ -116,7 +116,7 @@ const routes = [
             component: UserCharts
           },
           {
-            path: 'editar/',
+            path: 'editar/:id',
             name: 'Usuários - Editar',
             component: UserEdit
           },
@@ -140,7 +140,7 @@ const routes = [
             component: CategoryList
           },
           {
-            path: 'editar/',
+            path: 'editar/:id',
             name: 'Categorias - Editar',
             component: CategoryEdit
           },
@@ -164,7 +164,7 @@ const routes = [
             component: ProductList
           },
           {
-            path: 'editar/',
+            path: 'editar/:id',
             name: 'Produtos - Editar',
             component: ProductEdit
           },

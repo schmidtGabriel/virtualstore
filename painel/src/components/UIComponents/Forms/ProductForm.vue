@@ -1,5 +1,5 @@
 <template>
-  <div v-if="data">
+  <div>
     <form autocomplete="off">
       <div class="row">
         <div class="col-md-6">
@@ -45,15 +45,19 @@
           />
         </div>
 
-        <div class="col-md-12"  v-if="data._id">
+        <div class="col-md-12" >
           <div class="col-md-4"><h4 style="margin: 0"> Galeria de Imagens</h4></div> 
           <div class="col-md-8 text-right"> <button class="btn btn-fill btn-primary" v-on:click="addImage()"> Adicionar Imagens</button></div>
           <div class="col-md-12"><h5 v-if="data.images.length == 0"> Sem imagens </h5></div>
-          <div class="row">
-              <div class="col-md-3" v-for="item in data.images" style="margin-top: 10px">
-                <span class="ti-close" style="color: red; float: right" v-on:click="deleteImage(item)"></span>
-                <br>
-                <img  v-bind:src="item.url" width="100%" height="150px" v-viewer/>
+          <div class="col-md-12" style="border: 2px gray solid; border-radius: 10px; padding: 10px; margin-top: 10px">
+              <div class="col-md-3 " v-for="item in data.images">
+                <div class="col-md-6 no-padding">
+                <button class="btn" :class="item.isMain==true?'btn-fill':''" v-on:click="makeMain(item)" > {{item.isMain==true?'PRINCIPAL': 'GALERIA'}}</button>
+                </div>
+                <div class="col-md-3">
+                 <button class="btn btn-fill btn-danger" v-on:click="deleteImage(item)" > DELETAR</button>
+                </div>
+                <img  v-bind:src="item.url" width="100%" height="150px" style="margin-top:10px" v-viewer/>
             </div>
             </div>
         </div>
@@ -108,6 +112,7 @@ import { mapActions, mapState, mapGetters } from "vuex";
 import moment from "moment";
 import { NAMES } from '../../../config';
 import {getCookie} from 'src/utils/authService';
+import FormGroupCheckbox from '../Inputs/formGroupCheckbox.vue';
 
 
 
@@ -117,9 +122,7 @@ export default {
   },
 
   props: {
-    data: {
-      type: Object,
-    },
+    data: {},
     readonly: {
       type: Boolean,
       default: false,
@@ -158,6 +161,16 @@ export default {
 
     formatDate(date) {
       return moment.utc(date).utcOffset(0).format("DD/MM/YYYY HH:mm:ss");
+    },
+
+    makeMain(item){
+        for (let index = 0; index < this.data.images.length; index++) {
+          if(item._id == this.data.images[index]._id){
+            this.data.images[index].isMain = true
+          }else{
+            this.data.images[index].isMain = false
+          }
+        }
     },
     
      onFileChange() {
@@ -238,9 +251,6 @@ export default {
   },
   
     onInit() {
-      if(this.data._id){
-        this.data.category = this.data.category._id
-      }
       this.getCategoryList();
     },
 

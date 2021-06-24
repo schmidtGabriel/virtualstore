@@ -1,5 +1,5 @@
 <template>
-  <div v-if="data">
+  <div>
     <form autocomplete="off">
       <div class="row">
     
@@ -138,9 +138,7 @@ export default {
   },
 
   props: {
-    data: {
-      type: Object,
-    },
+    data: {},
     readonly: {
       type: Boolean,
       default: false,

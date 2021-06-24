@@ -21,6 +21,7 @@ import 'es6-promise/auto'
 import VueTheMask from 'vue-the-mask'
 import VuePaginate from "vue-paginate";
 import VModal from 'vue-js-modal'
+import './index.css'
 
 import moment from 'moment';
 moment.locale('pt-br');

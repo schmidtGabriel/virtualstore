@@ -1,5 +1,5 @@
 <template>
-  <div v-if="data">
+  <div>
     <form autocomplete="off">
       <div class="row">
         <div class="col-md-12">
@@ -30,9 +30,7 @@ export default {
   components: {},
 
   props: {
-    data: {
-      type: Object,
-    },
+    data: {},
     readonly: {
       type: Boolean,
       default: false,

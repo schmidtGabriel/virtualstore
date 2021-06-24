@@ -22,9 +22,9 @@ router.get('/', async (req, res) => {
 // get one
 router.get('/:id', async (req, res) => {
     try {
-        const category = await Category.findById(req.params.id);
+        const data = await Category.findById(req.params.id);
 
-         return res.send({category});
+         return res.send({data});
 
     } catch(err){
         return res.status(400).send(message(1));

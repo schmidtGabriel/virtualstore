@@ -54,15 +54,15 @@ const actions = {
           console.log(response);
           if (!response.ok) {
             commit(GET_CATEGORY_FAILURE);
-            reject();
+            return reject(response.body.$error);
           }
           commit(GET_CATEGORY_SUCCESS, {
-            category: response.body
+            category: response.body.data
           });
-          resolve(response.body);
+          return resolve(response.body.data);
         }, response => {
           commit(GET_CATEGORY_FAILURE);
-          reject();
+          return reject(response.body.$error);
         })
     })
   },

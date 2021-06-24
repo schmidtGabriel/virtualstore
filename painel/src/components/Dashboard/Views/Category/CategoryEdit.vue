@@ -85,6 +85,11 @@ export default {
         this.$router.push({
           name: "Categorias - Lista",
         });
+      }else{
+        this.getCategory(this.data).then((res)=>{
+          console.log(res)
+          this.data = res
+        })
       }
     },
   },

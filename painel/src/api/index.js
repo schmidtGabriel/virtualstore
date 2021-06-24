@@ -38,13 +38,14 @@ export default {
     this.loader = Vue.$loading.show({
       // Pass props by their camelCased names
       canCancel: true, // default false
-      color: '#000000',
-      loader: 'spinner',
+      color: 'black',
+      loader: 'dots',
       width: 64,
       height: 64,
-      backgroundColor: '#ffffff',
-      opacity: 0.5,
+      backgroundColor: '#f1f1f1',
+      opacity: 0.7,
       zIndex: 999,
+      blur: '5px'
     });
   },
   stopLoader: function(){

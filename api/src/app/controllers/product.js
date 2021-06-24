@@ -25,9 +25,9 @@ router.get('/', async (req, res) => {
 // get one
 router.get('/:id', async (req, res) => {
     try {
-        const product = await Product.findById(req.params.id);
+        const data = await Product.findById(req.params.id).populate(['images'])
 
-         return res.send({product});
+         return res.send({data});
 
     } catch(err){
         return res.status(400).send(message(1));

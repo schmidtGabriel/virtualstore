@@ -266,7 +266,7 @@
       this.$on("selectItem", item => {
         this.$router.push({
           name: "Usuários - Editar",
-          params: {id: item}
+          params: {id: item._id}
         });
       });
       this.$on("showFilter", () => {

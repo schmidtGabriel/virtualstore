@@ -53,7 +53,7 @@ const actions = {
             return reject(response.body.$error);
           }
           commit(GET_USER_SUCCESS, {
-            user: response.body
+            user: response.body.data
           });
           api.stopLoader()
           return resolve(response.body.data);

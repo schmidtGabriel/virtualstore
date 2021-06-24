@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="data._id">
     <div class="row">
       <div class="col-md-12">
           <div class="col-md-1" v-if="sidebarFlag() == 'ADMIN'">
@@ -75,6 +75,7 @@ export default {
     }),
     initData() {
       this.data = this.$route.params.id;
+
       this.verifyID();
     },
 
@@ -83,6 +84,10 @@ export default {
         this.$router.push({
           name: "Produtos - Lista",
         });
+      }else{
+        this.getProduct(this.data).then((res)=>{
+          this.data = res
+        })
       }
     },
 
@@ -101,6 +106,7 @@ export default {
     return {
       localReadonly: false,
       data: null,
+      dataID: null,
       readonly: true,
       gallery: null,
     };

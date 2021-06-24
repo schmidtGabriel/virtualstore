@@ -51,18 +51,17 @@ const actions = {
 
       api.getProduct(id)
         .then(response => {
-          console.log(response);
           if (!response.ok) {
             commit(GET_PRODUCT_FAILURE);
-            reject();
+            return reject(response.body.$error);
           }
           commit(GET_PRODUCT_SUCCESS, {
-            product: response.body
+            product: response.body.data
           });
-          resolve(response.body);
+          return resolve(response.body.data);
         }, response => {
           commit(GET_PRODUCT_FAILURE);
-          reject();
+          return reject(response.body.$error);
         })
     })
   },
