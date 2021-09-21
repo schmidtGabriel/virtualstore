@@ -1,5 +1,6 @@
 const mongoose = require('../../database');
 const bcrypt = require('bcryptjs');
+const Product = require('./Product');
 
 const ProductImageSchema = new mongoose.Schema({
     name: {
@@ -33,6 +34,11 @@ const ProductImageSchema = new mongoose.Schema({
 ProductImageSchema.pre('save', async function(next) {
     if(!this.url) {
         this.url = `${process.env.APP_URL}/files/${this.key}`;
+    }
+
+    const product = await Product.findById(this.product);
+    if(product.images.length == 0){
+        this.isMain = true
     }
     
     next();

@@ -35,6 +35,10 @@ export default {
             type: "success",
           });
           this.data = {};
+           this.$router.push({
+          name: "Produtos - Editar",
+          params: { id: res.info._id },
+        });
         })
         .catch((res) => {
           this.$notify({

@@ -74,8 +74,10 @@ const actions = {
       let avaliables = [
         "_id",
         "name",
+        "description",
         "category",
         "price",
+        "formattedPrice",
         "code"
       ];
 
@@ -177,6 +179,40 @@ const actions = {
           api.stopLoader()
           return reject(response.body.$error);
         })
+    })
+  },
+
+  updateMainImage({commit}, data) {
+    return new Promise((resolve, reject) => {
+
+      api.startLoader()
+      let avaliables = [
+        "_id",
+        "product",
+      ];
+
+      let obj = {};
+
+      for (let i of avaliables) {
+        if (data.hasOwnProperty(i)) {
+          obj[i] = data[i];
+        }
+      }
+
+          api.updateMainImage(obj)
+            .then(response => {
+              if (!response.ok) {
+                api.stopLoader()
+                return reject(response.body.$error);
+              } else {
+                api.stopLoader()
+                return resolve(response.body.$success);
+              }
+            }, response => {
+              api.stopLoader()
+              return reject(response.body.$error);
+            })
+      
     })
   },
   

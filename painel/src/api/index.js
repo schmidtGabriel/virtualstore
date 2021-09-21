@@ -177,6 +177,11 @@ export default {
       ID: id
     })
   },
+  updateMainImage: function (data) {
+    return ProductResource.update({
+      PATH: ['image', 'main']
+    }, data)
+  },
 
   //CATEGORY
   getCategoryList: function (q) {

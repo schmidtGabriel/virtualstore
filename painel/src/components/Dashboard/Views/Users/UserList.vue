@@ -109,7 +109,7 @@
     <div class="row">
       <div class="col-md-12">
         <div class="card">
-          <component-table
+          <component-search-table
             eventName="selectItem"
             :title="table.title"
             :sub-title="table.subTitle"
@@ -126,7 +126,7 @@
 </template>
 
 <script>
-  import ComponentTable from "components/UIComponents/Lists/ComponentTable.vue";
+  import ComponentSearchTable from "components/UIComponents/Lists/ComponentSearchTable.vue";
   import {mapActions, mapState, mapGetters} from "vuex";
   import moment from 'moment';
   const headers = ["Nome","Email", "Data Cadastro", "Status"];
@@ -164,7 +164,7 @@
 
   export default {
     components: {
-      ComponentTable
+      ComponentSearchTable
     },
 
     props: {

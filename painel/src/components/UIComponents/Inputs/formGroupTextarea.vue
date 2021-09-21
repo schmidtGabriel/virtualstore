@@ -13,7 +13,8 @@
       v-bind="$attrs"
       :value="value"
       @input="onTextChange"
-      v-if="isHtml" />
+      v-if="isHtml"
+      :disabled="readOnly" />
 
      <vue-editor
       class="background border-input"
@@ -21,7 +22,8 @@
       :value="value"
       @input="onTextChange"
       v-if="!isHtml"
-      :editorToolbar="customToolbar" />
+      :editorToolbar="customToolbar"
+      :disabled="readOnly" />
 
 <!-- @text-change="onTextChange" -->
 <!-- @input="updateText" -->
@@ -63,6 +65,10 @@ import { VueEditor } from 'vue2-editor'
         type: Boolean,
         default: true
       },
+      readOnly:{
+        type: Boolean,
+        default: true
+      }
       
     },
     methods: {

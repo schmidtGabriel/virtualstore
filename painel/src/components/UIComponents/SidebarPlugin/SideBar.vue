@@ -11,7 +11,7 @@
     <!-- -->
     <div class="sidebar-wrapper" id="style-3">
       <div class="logo">
-        <a href="/?#/admin/" class="simple-text">
+        <a :href="'/?#/admin/user/edit/'+getUser._id" class="simple-text">
           <div class="">
             <img
               src="static/img/logo.png"

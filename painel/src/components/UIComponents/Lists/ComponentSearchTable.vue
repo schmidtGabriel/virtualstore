@@ -4,7 +4,7 @@
       <slot name="header">
         <h4 class="title">{{title}}</h4>
         <p class="category">{{subTitle}}</p>
-        <p class="category">Qnt: {{this.dataAux ? this.dataAux.length : 0}}</p>
+        <p class="category">Qnt: {{dataAux ? dataAux.length : 0}}</p>
       </slot>
     </div>
         <div class="content col-md-6">
@@ -58,7 +58,7 @@
   import _ from 'lodash';
 
   export default {
-    name: "component-table",
+    name: "component-search-table",
     props: {
       headers: Array,
       columns: Array,
@@ -123,9 +123,7 @@
             return this.dataAux.filter((item)=>{
 
             return this.ignoringAccent(this.search).toLowerCase().split(' ').every(v => 
-            this.ignoringAccent(item.name).toLowerCase().includes(v) || 
-            item.year.toLowerCase().includes(v) || 
-            item.publicDescription.toLowerCase().includes(v))
+            this.ignoringAccent(item.name).toLowerCase().includes(v) )
             })
             }else{
               return this.dataAux;

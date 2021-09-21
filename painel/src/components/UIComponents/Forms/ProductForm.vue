@@ -42,20 +42,34 @@
             v-model="data.category"
             :selected="data.category"
             label="Categoria"
+            v-bind:readonly="readonly"
+
           />
         </div>
 
-        <div class="col-md-12" >
-          <div class="col-md-4"><h4 style="margin: 0"> Galeria de Imagens</h4></div> 
-          <div class="col-md-8 text-right"> <button class="btn btn-fill btn-primary" v-on:click="addImage()"> Adicionar Imagens</button></div>
+        <div class="col-md-12">
+          <fg-textarea
+            class="clean"
+            type="text"
+            label="Descrição"
+            placeholder=""
+            v-model="data.description"
+            :readOnly="readonly"
+            :isHtml="false"
+
+          />
+        </div>
+
+        <div class="col-md-12" v-if="data._id" >
+          <div class="col-md-12" style="padding-left: 0"><span style="font-size: 20px; font-weight: 700" > Galeria de Imagens - </span> <button class="btn btn-fill btn-warning" v-on:click="addImage()"> Adicionar Imagens</button></div> 
           <div class="col-md-12"><h5 v-if="data.images.length == 0"> Sem imagens </h5></div>
-          <div class="col-md-12" style="border: 2px gray solid; border-radius: 10px; padding: 10px; margin-top: 10px">
-              <div class="col-md-3 " v-for="item in data.images">
-                <div class="col-md-6 no-padding">
-                <button class="btn" :class="item.isMain==true?'btn-fill':''" v-on:click="makeMain(item)" > {{item.isMain==true?'PRINCIPAL': 'GALERIA'}}</button>
+          <div class="col-md-12 col-xs-12" style="border: 2px gray solid; border-radius: 10px; padding: 10px; margin-top: 10px" v-if="data.images.length > 0">
+              <div class="col-md-3 col-sm-6 col-xs-12" v-for="item in data.images">
+                <div class="col-md-6 col-xs-6" style="padding-left: 0px">
+                <button class="btn btn-primary btn-sm" :class="item.isMain==true?'btn-fill':''" v-on:click="makeMain(item)" > {{item.isMain==true?'PRINCIPAL': 'GALERIA'}}</button>
                 </div>
-                <div class="col-md-3">
-                 <button class="btn btn-fill btn-danger" v-on:click="deleteImage(item)" > DELETAR</button>
+                <div class="col-md-6 col-xs-6 text-right" style="padding-right: 0px">
+                 <button class="ti-trash btn btn-danger btn-sm" v-on:click="deleteImage(item)" > </button>
                 </div>
                 <img  v-bind:src="item.url" width="100%" height="150px" style="margin-top:10px" v-viewer/>
             </div>
@@ -154,7 +168,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["getCategoryList", "deleteProductImage", "sendProductImages"]),
+    ...mapActions(["getCategoryList", "deleteProductImage", "sendProductImages", "updateMainImage"]),
     ...mapGetters({
       sidebarFlag: "sidebarFlag",
     }),
@@ -164,6 +178,15 @@ export default {
     },
 
     makeMain(item){
+        if(item.isMain){
+          return this.$notify({
+            group: "foo",
+            title: "Atenção",
+            text: "Essa imagem já é a principal.",
+            position: "top center",
+            type: "warn",
+          });
+        }
         for (let index = 0; index < this.data.images.length; index++) {
           if(item._id == this.data.images[index]._id){
             this.data.images[index].isMain = true
@@ -171,12 +194,14 @@ export default {
             this.data.images[index].isMain = false
           }
         }
+
+        this.updateMainImage({_id: item._id, product: item.product})
     },
     
      onFileChange() {
        this.images = []
         const files = this.$refs.image.files;
-        this.data.gallery = files
+        this.imagesFiles = files
 
         if (files) {
           for (var i = 0; i < files.length; i++) {
@@ -191,7 +216,7 @@ export default {
 
     removeImage(image){
        this.images.splice(this.images.indexOf(image), 1)
-       this.data.gallery.splice(this.data.gallery.indexOf(image), 1)
+       this.data.imagesFiles.splice(this.data.imagesFiles.indexOf(image), 1)
     },
 
     deleteImage(image){
@@ -214,10 +239,21 @@ export default {
     },
 
     saveImage(){
-      for(var i=0 ; i < this.data.gallery.length; i++){
-        this.saveImages(this.data.gallery[i], this.data._id)
-        }
+      if(this.imagesFiles.length == 0){
+        return this.$notify({
+            group: "foo",
+            title: "Atenção",
+            text: "Adicione imagens primeiro.",
+            position: "top center",
+            type: "warn",
+          });
+      }
+      for(var i=0 ; i < this.imagesFiles.length; i++){
+        this.saveImages(this.imagesFiles[i], this.data._id)
+      }
 
+      this.images = []
+      this.imagesFiles = []
       this.$modal.hide("imageModal")
 
     },
@@ -301,7 +337,8 @@ export default {
     return {
       localReadonly: false,
       formD: null,
-      images: []
+      images: [],
+      imagesFiles: []
     };
   },
 };
